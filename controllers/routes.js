@@ -27,8 +27,6 @@ router.post("/api/workouts", (req, res) => {
       throw err;
     }
     console.log(res);
-  }).then((res) => {
-    console.log(res);
   });
 });
 
@@ -45,8 +43,8 @@ router.put("/api/workouts/:id", (req, res) => {
           exercises: {
             type: req.body.type,
             name: req.body.name,
-            distance: req.body.distance,
-            duration: req.body.distance,
+            distance: parseInt(req.body.distance),
+            duration: parseInt(req.body.distance),
           },
         },
       },
@@ -66,10 +64,10 @@ router.put("/api/workouts/:id", (req, res) => {
           exercises: {
             type: req.body.type,
             name: req.body.name,
-            weight: req.body.weight,
-            sets: req.body.sets,
-            reps: req.body.reps,
-            duration: req.body.duration,
+            weight: parseInt(req.body.weight),
+            sets: parseInt(req.body.sets),
+            reps: parseInt(req.body.reps),
+            duration: parseInt(req.body.duration),
           },
         },
       },
@@ -83,8 +81,15 @@ router.put("/api/workouts/:id", (req, res) => {
   }
 });
 
-router.get("/api/workout/range", (req,res)=>{
-  
+router.get("/api/workouts/range", (req,res)=>{
+  console.log("/api/workout/range hit");
+ Workout.find({}).then((data)=>{
+  res.json(data);
+ })
+})
+
+router.get("/stats", (req,res)=>{
+  res.sendFile(path.join(__dirname, "../public/stats.html"));
 })
 
 

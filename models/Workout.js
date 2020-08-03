@@ -23,14 +23,14 @@ const WorkoutSch = new Schema({
       reps: {
         type: Number,
       },
-      set: {
+      sets: {
         type: Number,
       },
+      distance: {
+        type: Number
+      }
     },
-  ],
-  distance: {
-    type: Number
-  }
+  ]
 });
 
 const Workout = mongoose.model("workout", WorkoutSch);

@@ -115,8 +115,11 @@ async function handleFormSubmit(event) {
   }
 
   await API.addExercise(workoutData);
+  
+
   clearInputs();
   toast.classList.add("success");
+  
 }
 
 function handleToastAnimationEnd() {

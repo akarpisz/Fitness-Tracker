@@ -4,7 +4,6 @@ const Workout = require("../models/Workout");
 
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
-  res.end();
 });
 
 router.get("/exercise", (req, res) => {
@@ -13,21 +12,23 @@ router.get("/exercise", (req, res) => {
 
 router.get("/api/workouts", (req, res) => {
   console.log("get route hit");
-  Workout.find({}).then((d) => {
-    console.log(d);
-    res.json(d);
-  });
+  Workout.find({}).then((data) => {
+    res.json(data);
+  }).catch(err=>{ res.json(err)});
 });
 
 router.post("/api/workouts", (req, res) => {
   console.log("post route hit");
   console.log(req.body);
-  Workout.create(req.body, (err, res) => {
-    if (err) {
-      throw err;
+  Workout.create(req.body, (err,result) => {
+    if (err){
+      return res.status(500).send(err)
     }
-    console.log(res);
-  });
+    console.log("create:" + result);
+    res
+    .status(200)
+    .json(result)
+  })
 });
 
 router.put("/api/workouts/:id", (req, res) => {
@@ -48,15 +49,16 @@ router.put("/api/workouts/:id", (req, res) => {
           },
         },
       },
-      (err, res) => {
+      (err,data) => {
         if (err) {
-          return err;
+          return res.status(500);
         }
-        console.log(res);
+        return res.status(200).json(data)
       }
-    );
+    )
+
   } else {
-    console.log("type resistance");
+    
     Workout.updateOne(
       { _id: req.params.id },
       {
@@ -71,18 +73,18 @@ router.put("/api/workouts/:id", (req, res) => {
           },
         },
       },
-      (err, res) => {
-        if (err) {
-          return err;
-        }
-        console.log(res);
+      (err, data) => {
+       if(err) {
+         return res.status(500);
+       }
+       return res.status(200).json(data)
       }
-    );
+    )
+    .catch((err)=>{ return err});
   }
 });
 
 router.get("/api/workouts/range", (req,res)=>{
-  console.log("/api/workout/range hit");
  Workout.find({}).then((data)=>{
   res.json(data);
  })
